@@ -1,68 +1,51 @@
 import { useState } from 'react'
+import { BrowserRouter, NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
-
-type ChecklistKey = 'ui' | 'logic' | 'test' | 'deploy'
-
-type ChecklistState = Record<
-  ChecklistKey,
-  {
-    checked: boolean
-    proof: string
-  }
->
-
-const initialChecklistState: ChecklistState = {
-  ui: { checked: false, proof: '' },
-  logic: { checked: false, proof: '' },
-  test: { checked: false, proof: '' },
-  deploy: { checked: false, proof: '' },
-}
 
 type Status = 'Not Started' | 'In Progress' | 'Shipped'
 
+type JobPageProps = {
+  title: string
+}
+
+function JobPage({ title }: JobPageProps) {
+  return (
+    <div className="job-page">
+      <h2 className="job-page__title">{title}</h2>
+      <p className="job-page__subtitle">This section will be built in the next step.</p>
+    </div>
+  )
+}
+
+const navItems = [
+  { path: '/', label: 'Dashboard' },
+  { path: '/saved', label: 'Saved' },
+  { path: '/digest', label: 'Digest' },
+  { path: '/settings', label: 'Settings' },
+  { path: '/proof', label: 'Proof' },
+] as const
+
 function App() {
-  const [checklist, setChecklist] = useState<ChecklistState>(initialChecklistState)
+  const [isNavOpen, setIsNavOpen] = useState(false)
+
   const status: Status = 'In Progress'
   const currentStep = 1
   const totalSteps = 4
 
-  const prompt =
-    'Create a calm, intentional interface that follows the KodNest Premium Build System layout:\n' +
-    'Top Bar → Context Header → Primary Workspace (70%) + Secondary Panel (30%) → Proof Footer.'
-
-  const handleChecklistToggle = (key: ChecklistKey) => {
-    setChecklist((prev) => ({
-      ...prev,
-      [key]: {
-        ...prev[key],
-        checked: !prev[key].checked,
-      },
-    }))
-  }
-
-  const handleChecklistProofChange = (key: ChecklistKey, value: string) => {
-    setChecklist((prev) => ({
-      ...prev,
-      [key]: {
-        ...prev[key],
-        proof: value,
-      },
-    }))
-  }
-
-  const handleCopyPrompt = async () => {
-    try {
-      await navigator.clipboard.writeText(prompt)
-    } catch {
-      // In environments without clipboard access, fail silently.
-    }
-  }
-
   const normalizedStatus =
     status === 'In Progress' ? 'in-progress' : status === 'Shipped' ? 'shipped' : 'not-started'
 
+  const toggleNav = () => {
+    setIsNavOpen((open) => !open)
+  }
+
+  const closeNav = () => {
+    setIsNavOpen(false)
+  }
+
   return (
-    <div className="app">
+    <BrowserRouter>
+      <div className="app">
       <header className="top-bar">
         <div className="top-bar__project">KodNest Premium Build System</div>
         <div className="top-bar__progress">
@@ -74,157 +57,76 @@ function App() {
       </header>
 
       <section className="context-header">
-        <h1 className="context-header__title">Define Your Build Layout</h1>
+        <h1 className="context-header__title">Job Notification Tracker</h1>
         <p className="context-header__subtitle">
-          Establish the consistent shell used across every premium build screen. This structure
-          stays stable while product features evolve.
+          Calm shell for tracking jobs, saved roles, and weekly digests. Routes are in place; the
+          product experiences will follow.
         </p>
       </section>
 
+      <nav className="job-nav">
+        <div className="job-nav__inner">
+          <button
+            type="button"
+            className="job-nav__toggle"
+            aria-label="Toggle navigation"
+            onClick={toggleNav}
+          >
+            <span />
+            <span />
+          </button>
+          <div className={`job-nav__links ${isNavOpen ? 'job-nav__links--open' : ''}`}>
+            {navItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  `job-nav__link${isActive ? ' job-nav__link--active' : ''}`
+                }
+                onClick={closeNav}
+                end={item.path === '/'}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
+        </div>
+      </nav>
+
       <main className="workspace">
         <section className="workspace__primary">
-          <div className="card">
-            <h2 className="card__title">Primary Workspace</h2>
-            <p className="card__body">
-              This area hosts the main interaction for the current step. Keep content focused and
-              predictable, with clear grouping and generous whitespace.
-            </p>
-            <ul className="list">
-              <li>Use cards to group related controls and information.</li>
-              <li>Limit each card to a small number of decisions at once.</li>
-              <li>Respect the spacing scale to avoid visual noise.</li>
-            </ul>
-          </div>
-
-          <div className="card">
-            <h2 className="card__title">Interaction Principles</h2>
-            <p className="card__body">
-              All interactions should feel calm and deliberate. Use subtle transitions and clear
-              focus states instead of animations or visual tricks.
-            </p>
-            <ul className="list">
-              <li>Buttons share the same radius, typography, and hover behavior.</li>
-              <li>Inputs use clean borders with a confident, visible focus state.</li>
-              <li>No gradients, glassmorphism, or decorative shadows.</li>
-            </ul>
-          </div>
+          <Routes>
+            <Route path="/" element={<JobPage title="Dashboard" />} />
+            <Route path="/dashboard" element={<Navigate to="/" replace />} />
+            <Route path="/saved" element={<JobPage title="Saved" />} />
+            <Route path="/digest" element={<JobPage title="Digest" />} />
+            <Route path="/settings" element={<JobPage title="Settings" />} />
+            <Route path="/proof" element={<JobPage title="Proof" />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
         </section>
 
         <aside className="workspace__secondary">
           <div className="card">
-            <h2 className="card__title">Step Guidance</h2>
+            <h2 className="card__title">Route Shell Only</h2>
             <p className="card__body">
-              Use this panel to keep the current step grounded. The prompt below can be copied into
-              your build tool when you refine or regenerate this layout.
+              Each section currently renders a calm placeholder. The actual job-tracking logic and
+              data will be introduced in the next step.
             </p>
-
-            <div className="prompt">
-              <pre className="prompt__content">{prompt}</pre>
-              <div className="button-row">
-                <button className="button button--secondary" type="button" onClick={handleCopyPrompt}>
-                  Copy
-                </button>
-              </div>
-            </div>
-
-            <div className="button-row" style={{ marginTop: 16 }}>
-              <button className="button button--primary" type="button">
-                Build in Lovable
-              </button>
-              <button className="button button--secondary" type="button">
-                It Worked
-              </button>
-              <button className="button button--secondary" type="button">
-                Error
-              </button>
-              <button className="button button--secondary" type="button">
-                Add Screenshot
-              </button>
-            </div>
           </div>
         </aside>
       </main>
 
       <footer className="proof-footer">
         <div className="proof-footer__inner">
-          <div className="proof-item">
-            <label className="proof-item__label">
-              <input
-                type="checkbox"
-                checked={checklist.ui.checked}
-                onChange={() => handleChecklistToggle('ui')}
-              />
-              <span>UI Built</span>
-            </label>
-            {checklist.ui.checked && (
-              <input
-                className="proof-item__input"
-                placeholder="Link to UI implementation or description"
-                value={checklist.ui.proof}
-                onChange={(event) => handleChecklistProofChange('ui', event.target.value)}
-              />
-            )}
-          </div>
-
-          <div className="proof-item">
-            <label className="proof-item__label">
-              <input
-                type="checkbox"
-                checked={checklist.logic.checked}
-                onChange={() => handleChecklistToggle('logic')}
-              />
-              <span>Logic Working</span>
-            </label>
-            {checklist.logic.checked && (
-              <input
-                className="proof-item__input"
-                placeholder="Reference to logic or repository link"
-                value={checklist.logic.proof}
-                onChange={(event) => handleChecklistProofChange('logic', event.target.value)}
-              />
-            )}
-          </div>
-
-          <div className="proof-item">
-            <label className="proof-item__label">
-              <input
-                type="checkbox"
-                checked={checklist.test.checked}
-                onChange={() => handleChecklistToggle('test')}
-              />
-              <span>Test Passed</span>
-            </label>
-            {checklist.test.checked && (
-              <input
-                className="proof-item__input"
-                placeholder="Link to test run, CI job, or report"
-                value={checklist.test.proof}
-                onChange={(event) => handleChecklistProofChange('test', event.target.value)}
-              />
-            )}
-          </div>
-
-          <div className="proof-item">
-            <label className="proof-item__label">
-              <input
-                type="checkbox"
-                checked={checklist.deploy.checked}
-                onChange={() => handleChecklistToggle('deploy')}
-              />
-              <span>Deployed</span>
-            </label>
-            {checklist.deploy.checked && (
-              <input
-                className="proof-item__input"
-                placeholder="Deployment URL or environment reference"
-                value={checklist.deploy.proof}
-                onChange={(event) => handleChecklistProofChange('deploy', event.target.value)}
-              />
-            )}
-          </div>
+          <p className="proof-footer__note">
+            Proof checklist for shipped job notification flows will be configured in a later
+            iteration.
+          </p>
         </div>
       </footer>
-    </div>
+      </div>
+    </BrowserRouter>
   )
 }
 
