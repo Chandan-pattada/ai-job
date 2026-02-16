@@ -1,0 +1,228 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background);
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-3);
+  height: 64px;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.top-bar__project {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.top-bar__progress {
+  font-size: 14px;
+}
+
+.top-bar__status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-badge {
+  padding: 4px var(--space-2);
+  border-radius: 9999px;
+  border: 1px solid rgba(17, 17, 17, 0.16);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.status-badge--in-progress {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.status-badge--shipped {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.status-badge--not-started {
+  border-color: rgba(17, 17, 17, 0.16);
+}
+
+.context-header {
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.context-header__title {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-1);
+}
+
+.context-header__subtitle {
+  font-size: 16px;
+}
+
+.workspace {
+  display: flex;
+  flex: 1;
+  padding: 0 var(--space-3);
+  gap: var(--space-3);
+}
+
+.workspace__primary {
+  flex: 7;
+  padding-bottom: var(--space-5);
+  padding-top: var(--space-4);
+}
+
+.workspace__secondary {
+  flex: 3;
+  padding-bottom: var(--space-5);
+  padding-top: var(--space-4);
+}
+
+.card {
+  border-radius: var(--radius-base);
+  border: 1px solid rgba(17, 17, 17, 0.1);
+  padding: var(--space-3);
+  background-color: var(--color-background);
+}
+
+.card + .card {
+  margin-top: var(--space-3);
+}
+
+.card__title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.card__body {
+  font-size: 16px;
+}
+
+.list {
+  font-size: 14px;
+  margin-top: var(--space-2);
+}
+
+.list li + li {
+  margin-top: var(--space-1);
+}
+
+.prompt {
+  margin-top: var(--space-3);
+  border-radius: var(--radius-base);
+  border: 1px solid rgba(17, 17, 17, 0.16);
+  padding: var(--space-2);
+  background-color: rgba(17, 17, 17, 0.02);
+}
+
+.prompt__content {
+  margin: 0 0 var(--space-2);
+  font-family: 'SFMono-Regular', ui-monospace, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px var(--space-2);
+  border-radius: var(--radius-base);
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-standard), border-color var(--transition-standard),
+    color var(--transition-standard);
+  background-color: transparent;
+}
+
+.button--primary {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+  border-color: var(--color-accent);
+}
+
+.button--primary:hover {
+  background-color: rgba(139, 0, 0, 0.9);
+  border-color: rgba(139, 0, 0, 0.9);
+}
+
+.button--secondary {
+  border-color: rgba(17, 17, 17, 0.24);
+  color: var(--color-text-primary);
+}
+
+.button--secondary:hover {
+  background-color: rgba(17, 17, 17, 0.04);
+}
+
+.proof-footer {
+  border-top: 1px solid rgba(17, 17, 17, 0.08);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-background);
+}
+
+.proof-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.proof-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.proof-item__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 14px;
+}
+
+.proof-item__input {
+  min-width: 240px;
+  max-width: 320px;
+  padding: 8px var(--space-2);
+  border-radius: var(--radius-base);
+  border: 1px solid rgba(17, 17, 17, 0.16);
+  background-color: var(--color-background);
+  font-size: 14px;
+}
+
+.proof-item__input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+@media (max-width: 960px) {
+  .workspace {
+    flex-direction: column;
+  }
+
+  .workspace__primary,
+  .workspace__secondary {
+    padding-top: var(--space-3);
+  }
+}
